@@ -1,0 +1,24 @@
+Simple AI Pseudo Code
+
+1>inputs are up, down, left, right for car
+2>String left = "left", String right = "right", String down = "down", String up = "up"
+3>boolean high_score_fail = false
+
+3>initialize dictionary of past directions and their scores, like so {down: [], left: [], right: [], up: []}
+Each array has to have a fixed length, deleting all old data. For example if the array length maximum was 5, an array of [1,2,3,4,5] would change to [2,3,4,5,6] if 6 was added. This is to simulate the learning process.
+
+4>loop:
+
+5>if no moves have been made yet try a random direction. Otherwise move in the direction with the highest score. Only using the most recent for each move. 
+
+6>If high_score_fail == true, look through all the move score data apart from the move that failed, and find the move with the highest score. set high_score_fail to false and then do the move! 
+
+7>get score for move and assign score to move dict array, example: {down: [3.4], left: [], right: [], up: []}
+
+8>if score is better than previous scores, repeat this move
+9>	if doing the same move again resulted in a lower score, high_score_fail = true
+10>if it's not better, high_score_fail = true
+
+10>end loop
+
+		
