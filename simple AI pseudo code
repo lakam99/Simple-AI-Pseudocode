@@ -1,30 +1,79 @@
 Simple AI Pseudo Code
 
+class Teacher:
+	private point = (0, 0)	//we don't want the AI to know its destination; we want it to learn
+	AI_previous_point = (0, 0) //we need the previous point to determine how good they did.
+				   //It's up to you if you want to make this an array for further complexity
+	
+	initialize function (no parameters are passed here, in case the AI is secretly alive):
+		point = promt the user to enter in a destination point within a constraint, example ( 0 - 500, 0 - 500)
+			as (x, y)
+	end initialize function
+	
+	distance_formula function (x1, y1, x2, y2):
+		return square_root_of ( (x2 - x1)^2 + (y2 - y1)^2 )
+	end distance_formula function
+	
+	grade_AI_performance (pass in the AI's new position as (x, y) ):
+		//I recommend calculating the distance between the AI's current position and the destination position
+		//Also calculate the distance between the previous point and the current point to tell the AI the margin
+		//that it got wrong. 
+		
+		if AI position (x, y) is the same as the destionation point,
+		the AI has made it to the destination!!! Try giving it a new point and don't
+		erase its memory.
+		
+		new_distance = distance_formula (x, y, point[x] // the destination point's x coordinate,
+						point[y] // the destionation point's y coordinate )
+												
+		old_distance = distance_formula (AI_previous_point[x], AI_previous_point[y], point[x], point[y] )
+		
+		//You can come up with your own way to calculate how well the AI did, I just thought this is the
+		//easiest way
+		
+		float score = old_distance / new_distance	//this number has to be stored as a floating point
+								//the decimal accuracy is crucial for this calculation
+								//unless you're prepared to multiply it by at least 1000.
+								
+		return score
+
+		
 class AI:
 	initialize function:
-		1>/comment/inputs are up, down, left, right for car/comment/
+		/comment/inputs are up, down, left, right for car/comment/
 		
-		2>String left = "left", String right = "right", String down = "down", String up = "up"
+		String left = "left", String right = "right", String down = "down", String up = "up"
 
-		3>initialize dictionary of past directions and their scores, like so {down: [], left: [], right: [], up: []}
-		Each array has to have a fixed length, deleting all old data. For example if the array length maximum was 5, an array of [1,2,3,4,5] would change to [2,3,4,5,6] if 6 was added. This is to simulate the learning process.
+		initialize dictionary of past directions and their scores, 
+		like so {down: [], left: [], right: [], up: []}
+		Each array has to have a fixed length, deleting all old data. 
+		For example if the array length maximum was 5, an array of [1,2,3,4,5]
+		would change to [2,3,4,5,6] if 6 was added. This is to simulate the learning process.
+		
+		initialize Teacher object called Sensei, this will prompt the user with the initialize function for the teacher
+	
 	end initialize function
 
 	drive function:
-		4>boolean high_score_fail = false
-		5>loop:
+		boolean high_score_fail = false
+		score = 0
+		loop:
 
-		6>if no moves have been made yet try a random direction. Otherwise move in the direction with the highest score. Only using the most recent for each move. 
+		if no moves have been made yet try a random direction. Otherwise move in the direction with the highest score. Only using the most recent for each move. 
 
-		7>If high_score_fail == true, look through all the move score data apart from the move that failed, and find the move with the highest score. set high_score_fail to false and then do the move! 
+		If high_score_fail == true,
+			look through all the move score data apart from the move that failed,
+			and find the move with the highest score.
+			set high_score_fail to false and then do the move! 
 
-		8>get score for move and assign score to move dict array, example: {down: [3.4], left: [], right: [], up: []}
+		 assign Sensei.grade_AI_performance(pass in the AI's new position)	//this function gets the score
+		 to the move dict array, example: {down: [1.010101], left: [], right: [], up: []}
 
-		9>if score is better than previous scores, repeat this move
-		10>	if doing the same move again resulted in a lower score, high_score_fail = true
-		11>if it's not better, high_score_fail = true
+		if score is better than previous scores, repeat this move
+			if doing the same move again resulted in a lower score, high_score_fail = true
+		if it's not better, high_score_fail = true
 
-		12>end loop
+		end loop
 	end drive function
 
 
