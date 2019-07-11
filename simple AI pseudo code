@@ -1,7 +1,7 @@
 Simple AI Pseudo Code
 
 class Teacher:
-	private point = (0, 0)	//we don't want the AI to know its destination; we want it to learn
+	private point = (0, 0)	//This variable will hold the coordinates of where we want the AI to go, the AI will not know this
 	AI_previous_point = (0, 0) //we need the previous point to determine how good they did.
 				   //It's up to you if you want to make this an array for further complexity
 	
@@ -44,32 +44,55 @@ class AI:
 		
 		String left = "left", String right = "right", String down = "down", String up = "up"
 
-		initialize dictionary of past directions and their scores, 
-		like so {down: [], left: [], right: [], up: []}
-		Each array has to have a fixed length, deleting all old data. 
+		//Initialize dictionary of past directions and their scores
+		moves = {down: [], left: [], right: [], up: []}	//python syntax
+		
+		fixed_length = 5;
+		
+		Each array within the dictionary has to have a fixed length, deleting all old data. 
 		For example if the array length maximum was 5, an array of [1,2,3,4,5]
 		would change to [2,3,4,5,6] if 6 was added. This is to simulate the learning process.
 		
 		initialize Teacher object called Sensei, this will prompt the user with the initialize function for the teacher
 	
 	end initialize function
-
+	
+	def assign_score(direction_moved, score_assigned):
+		
+		//first check if the array has passed it's size limit
+		if moves[direction_moved].length > fixed_length then shift everythin back,
+			adding the new score to the end of the array
+		
+		otherwise, simply add the new score into its corresponding move array.
+		Example 1.010101 added to moves[down] results in moves = {down: [1.010101], left: [], right: [], up: []}
+		
+	end assign_score function
+		
+	//Function that actually does the "driving"
 	drive function:
 		boolean high_score_fail = false
 		score = 0
+		
 		loop:
-
-		if no moves have been made yet try a random direction. Otherwise move in the direction with the highest score. Only using the most recent for each move. 
-
+		
 		If high_score_fail == true,
 			look through all the move score data apart from the move that failed,
 			and find the move with the highest score.
 			set high_score_fail to false and then do the move! 
 
-		 assign Sensei.grade_AI_performance(pass in the AI's new position)	//this function gets the score
-		 to the move dict array, example: {down: [1.010101], left: [], right: [], up: []}
+		Otherwise if no moves have been made yet try a random direction.
+		If a move has already been made, try moving in the direction with the highest score,
+		only checking the most recent scores for each move. 
+		
+		score = Sensei.grade_AI_performance(pass in the AI's new position)
+
+		 assign_score (direction_moved,		//<--this function has to know which direction the AI went//
+		 		score )
+		 
+		 //assign_score() is the function defined above this function
 
 		if score is better than previous scores, repeat this move
+			score = Sensei.grade_AI_performance (AI's new position as (x, y) )
 			if doing the same move again resulted in a lower score, high_score_fail = true
 		if it's not better, high_score_fail = true
 
